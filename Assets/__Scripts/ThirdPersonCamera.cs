@@ -26,6 +26,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     [SerializeField]
     private Transform Spine;
+    [SerializeField]
+    private Joystick joystick;
 
     // Start is called before the first frame update
     void Start()
@@ -40,8 +42,10 @@ public class ThirdPersonCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        yaw += Input.GetAxis("Mouse X") * Sensitivity;
-        pitch -= Input.GetAxis("Mouse Y") * Sensitivity;
+        //yaw += Input.GetAxis("Mouse X") * Sensitivity;
+        yaw += joystick.Horizontal * Sensitivity;
+        //pitch -= Input.GetAxis("Mouse Y") * Sensitivity;
+        pitch -= joystick.Vertical * Sensitivity;
         pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
 
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);

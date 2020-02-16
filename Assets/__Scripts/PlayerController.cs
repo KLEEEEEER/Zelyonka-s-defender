@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
     public RectTransform healthbar;
 
+    public Joystick joystick;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +58,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        //Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 input = new Vector2(joystick.Horizontal, joystick.Vertical);
         Vector2 inputDir = input.normalized;
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -64,7 +67,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        isAiming = (Input.GetKey(KeyCode.Mouse1)) ? true : false;
+        //isAiming = (Input.GetKey(KeyCode.Mouse1)) ? true : false;
 
         if (!isAiming)
         {
@@ -81,13 +84,13 @@ public class PlayerController : MonoBehaviour
         else
         {
             Crosshair.enabled = true;
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            /*if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 animator.Play("Armature|ShootPistol");
                 Gun currentGunComponent = currentGun.GetComponent<Gun>();
                 if (currentGunComponent != null)
                     currentGunComponent.Shoot();
-            }
+            }*/
             animator.SetLayerWeight(1, 1);
             //transform.eulerAngles = cameraT.eulerAngles;
             float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
@@ -132,13 +135,26 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Jump()
+    public void Jump()
     {
         if (controller.isGrounded)
         {
             float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
             velocityY = jumpVelocity;
         }
+    }
+
+    public void Aim()
+    {
+        isAiming = !isAiming;
+    }
+
+    public void Shoot()
+    {
+        animator.Play("Armature|ShootPistol");
+        Gun currentGunComponent = currentGun.GetComponent<Gun>();
+        if (currentGunComponent != null)
+            currentGunComponent.Shoot();
     }
 
     float GetModifiedSmoothTime(float smoothTime)
