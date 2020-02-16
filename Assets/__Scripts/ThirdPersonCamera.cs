@@ -24,6 +24,9 @@ public class ThirdPersonCamera : MonoBehaviour
 
     Vector3 aimCurrentSmoothVelocity;
 
+    [SerializeField]
+    private Transform Spine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +56,7 @@ public class ThirdPersonCamera : MonoBehaviour
         else
         {
             //transform.position = aimPosition.position;
+            Spine.Rotate(currentRotation.x, 0, 0, Space.Self);
             transform.position = Vector3.SmoothDamp(transform.position, aimPosition.position, ref aimCurrentSmoothVelocity, aimSmoothTime);
         }
     }
